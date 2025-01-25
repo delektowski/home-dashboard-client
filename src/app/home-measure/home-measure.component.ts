@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
 import { Apollo, gql } from 'apollo-angular';
+import { AsyncPipe, NgForOf } from '@angular/common';
 import { map } from 'rxjs';
 
 
@@ -16,13 +16,12 @@ const GET_MEASURES_HOME = gql`
 `;
 
 @Component({
-  selector: 'app-root',
-  imports: [RouterOutlet],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss',
+  selector: 'app-home-measure',
+  imports: [AsyncPipe, NgForOf],
+  templateUrl: './home-measure.component.html',
+  styleUrl: './home-measure.component.scss'
 })
-
-export class AppComponent implements OnInit {
+export class HomeMeasureComponent implements OnInit {
   loading: boolean | undefined;
   homeMeasures: any;
 
@@ -40,9 +39,4 @@ export class AppComponent implements OnInit {
       })
       .valueChanges.pipe(map(result => result.data.getMeasuresHome));
   }
-
-
 }
-
-
-
