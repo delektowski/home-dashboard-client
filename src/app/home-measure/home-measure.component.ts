@@ -1,29 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { Apollo, gql } from 'apollo-angular';
+import { Component, inject, OnInit } from '@angular/core';
 import { NgForOf } from '@angular/common';
 import { map } from 'rxjs';
-
-
-const GET_MEASURES_HOME = gql`
-  query getMeasuresHome($placeName: String!) {
-    getMeasuresHome(placeName: $placeName) {
-      id
-      placeName
-      temperature
-      humidity
-    }
-  }
-`;
-
-const MEASURES_HOME_SUBSCRIPTION = gql`
-  subscription {
-    measuresHomeAdded {
-      id
-      placeName
-      temperature
-    }
-  }
-`;
+import { HomeMeasuresService } from './services/home-measures.service';
 
 @Component({
   selector: 'app-home-measure',
@@ -34,34 +12,28 @@ const MEASURES_HOME_SUBSCRIPTION = gql`
 export class HomeMeasureComponent implements OnInit {
   loading: boolean | undefined;
   homeMeasures: any;
-
-
-  constructor(private readonly apollo: Apollo) {
-  }
+  private homeMeasuresService = inject(HomeMeasuresService);
 
   ngOnInit() {
+    this.getMeasuresHome();
+    this.subscribeMeasuresHome();
+  }
 
-
-    this.apollo
-      .watchQuery<any>({
-        query: GET_MEASURES_HOME,
-        variables: {
-          placeName: 'Living Room',
-        },
-      })
-      .valueChanges.pipe(map(result => result.data.getMeasuresHome)).subscribe((result) => {
+  /**
+   * Fetches home measures data from the service.
+   */
+  getMeasuresHome() {
+    this.homeMeasuresService.getMeasuresHome().pipe(map(result => result.data.getMeasuresHome)).subscribe((result) => {
       this.homeMeasures = result;
-    });
-
-    this.apollo.subscribe({
-      query: MEASURES_HOME_SUBSCRIPTION,
-      /*
-        accepts options like `errorPolicy` and `fetchPolicy`
-      */
-    }).pipe(map((result: any) => result.data.measuresHomeAdded)).subscribe((result: any) => {
-      this.homeMeasures = [...this.homeMeasures, result];
     });
   }
 
-
+  /**
+   * Subscribes to home measures updates from the service.
+   */
+  subscribeMeasuresHome() {
+    this.homeMeasuresService.subscribeMeasuresHome().pipe(map((result: any) => result.data.measuresHomeAdded)).subscribe((result: any) => {
+      this.homeMeasures.push(result)
+    });
+  }
 }
