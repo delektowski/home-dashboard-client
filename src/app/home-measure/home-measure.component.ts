@@ -11,7 +11,7 @@ import { HomeMeasuresService } from './services/home-measures.service';
 })
 export class HomeMeasureComponent implements OnInit {
   loading: boolean | undefined;
-  homeMeasures: any;
+  homeMeasures: any = [];
   private homeMeasuresService = inject(HomeMeasuresService);
 
   ngOnInit() {
@@ -33,7 +33,7 @@ export class HomeMeasureComponent implements OnInit {
    */
   subscribeMeasuresHome() {
     this.homeMeasuresService.subscribeMeasuresHome().pipe(map((result: any) => result.data.measuresHomeAdded)).subscribe((result: any) => {
-      this.homeMeasures.push(result)
+      this.homeMeasures = [...this.homeMeasures, result]
     });
   }
 }
