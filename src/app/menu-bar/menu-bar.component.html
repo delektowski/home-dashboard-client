@@ -1,0 +1,14 @@
+<div class="card">
+  <p-menubar [model]="items" s>
+    <ng-template pTemplate="start">
+      <ng-container *ngFor="let item of items">
+        <a [routerLink]="item.routerLink">{{ item.label }}</a>
+      </ng-container>
+    </ng-template>
+    <ng-template #end>
+      <p-button severity="secondary" variant="outlined" icon="{{isDarkMode ? 'pi pi-sun' : 'pi pi-moon'}}" (onClick)="toggleDarkMode()" />
+    </ng-template>
+  </p-menubar>
+
+
+</div>

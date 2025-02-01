@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Apollo, gql } from 'apollo-angular';
 import { map } from 'rxjs';
+import { MenuBarComponent } from './menu-bar/menu-bar.component';
 
 
 const GET_MEASURES_HOME = gql`
@@ -17,7 +18,7 @@ const GET_MEASURES_HOME = gql`
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, MenuBarComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })

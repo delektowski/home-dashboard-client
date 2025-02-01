@@ -3,6 +3,8 @@ import { NgForOf } from '@angular/common';
 import { map } from 'rxjs';
 import { HomeMeasuresService } from './services/home-measures.service';
 
+
+
 @Component({
   selector: 'app-home-measure',
   imports: [NgForOf],
@@ -12,6 +14,8 @@ import { HomeMeasuresService } from './services/home-measures.service';
 export class HomeMeasureComponent implements OnInit {
   loading: boolean | undefined;
   homeMeasures: any = [];
+  chart: any = [];
+
   private homeMeasuresService = inject(HomeMeasuresService);
 
   ngOnInit() {
@@ -33,7 +37,9 @@ export class HomeMeasureComponent implements OnInit {
    */
   subscribeMeasuresHome() {
     this.homeMeasuresService.subscribeMeasuresHome().pipe(map((result: any) => result.data.measuresHomeAdded)).subscribe((result: any) => {
-      this.homeMeasures = [...this.homeMeasures, result]
+      this.homeMeasures = [...this.homeMeasures, result];
     });
   }
+
+
 }
