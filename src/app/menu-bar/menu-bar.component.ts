@@ -1,26 +1,31 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, inject, OnInit, ViewEncapsulation } from '@angular/core';
 import { Menubar, MenubarModule } from 'primeng/menubar';
-import { MenuItem, MenuItemCommandEvent, PrimeIcons } from 'primeng/api';
+import { MenuItem, PrimeIcons } from 'primeng/api';
 import { Button } from 'primeng/button';
-import { RouterLink } from '@angular/router';
+import { HomeMeasuresService } from '../home-measure/services/home-measures.service';
+import { DarkModeService } from '../home-measure/services/dark-mode.service';
 
 @Component({
   selector: 'app-menu-bar',
-  imports: [MenubarModule, Menubar, Button, RouterLink],
+  imports: [MenubarModule, Menubar, Button],
   templateUrl: './menu-bar.component.html',
   styleUrl: './menu-bar.component.scss',
   encapsulation: ViewEncapsulation.None,
 })
 export class MenuBarComponent implements OnInit {
+
   items: MenuItem[] | undefined;
   isDarkMode = true;
+  private darkModeService = inject(DarkModeService);
+
 
   ngOnInit() {
     this.toggleDarkMode();
     this.items = [{
       label: 'Measures',
       icon: PrimeIcons.GAUGE,
-      routerLink: "measures"
+      iconStyle: { color: 'green', fontSize: '20px' },
+      routerLink: 'measures',
     }];
   }
 
@@ -28,6 +33,8 @@ export class MenuBarComponent implements OnInit {
     const element = document.querySelector('html');
     element?.classList.toggle('app-dark-mode');
     this.isDarkMode = !this.isDarkMode;
+    this.darkModeService.toggleDarkMode(this.isDarkMode);
+
   }
 
 

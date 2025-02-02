@@ -21,6 +21,7 @@
     "@apollo/client": "^3.12.7",
     "@primeng/themes": "^19.0.5",
     "apollo-angular": "^8.0.0",
+    "chart.js": "^4.4.7",
     "graphql": "^16.10.0",
     "graphql-ws": "^5.16.2",
     "primeicons": "^7.0.0",
