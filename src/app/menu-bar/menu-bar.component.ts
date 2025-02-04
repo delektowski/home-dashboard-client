@@ -2,8 +2,8 @@ import { Component, inject, OnInit, ViewEncapsulation } from '@angular/core';
 import { Menubar, MenubarModule } from 'primeng/menubar';
 import { MenuItem, PrimeIcons } from 'primeng/api';
 import { Button } from 'primeng/button';
-import { HomeMeasuresService } from '../home-measure/services/home-measures.service';
-import { DarkModeService } from '../home-measure/services/dark-mode.service';
+import { HomeMeasuresService } from '../services/home-measures.service';
+import { DarkModeService } from '../services/dark-mode.service';
 
 @Component({
   selector: 'app-menu-bar',

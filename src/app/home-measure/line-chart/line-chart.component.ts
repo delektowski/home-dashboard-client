@@ -1,7 +1,7 @@
-import { ChangeDetectorRef, Component, inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, Input, OnInit, PLATFORM_ID } from '@angular/core';
 import { ChartModule } from 'primeng/chart';
 import { isPlatformBrowser } from '@angular/common';
-import { DarkModeService } from '../home-measure/services/dark-mode.service';
+import { DarkModeService } from '../../services/dark-mode.service';
 import { CardModule } from 'primeng/card';
 
 @Component({
@@ -18,6 +18,9 @@ export class LineChartComponent implements OnInit {
   platformId = inject(PLATFORM_ID);
 
   private darkModeService = inject(DarkModeService);
+
+  @Input() axisX: unknown[] = []
+  @Input() axisY: unknown[] = []
 
   constructor(private cd: ChangeDetectorRef) {
   }
@@ -40,15 +43,16 @@ export class LineChartComponent implements OnInit {
       const textColor = documentStyle.getPropertyValue('--p-text-color');
       const textColorSecondary = documentStyle.getPropertyValue('--p-text-muted-color');
       const surfaceBorder = documentStyle.getPropertyValue('--p-content-border-color');
-
+      console.log("this.axisX", this.axisX)
+      console.log("this.axisY", this.axisY)
       this.data = {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        labels: this.axisX,
         datasets: [
 
           {
             label: 'Third Dataset',
 
-            data: [12, 51, 62, 33, 21, 62, 45],
+            data: this.axisY,
             fill: false,
             borderColor: documentStyle.getPropertyValue('--p-red-500'),
             tension: 0.4

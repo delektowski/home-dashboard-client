@@ -1,5 +1,3 @@
-<h1>HOME MEASURE</h1>
-
-<app-line-chart></app-line-chart>
-
-
+@if (homeMeasuresChart && homeMeasuresChart.labels && homeMeasuresChart.values) {
+  <app-line-chart [axisX]="homeMeasuresChart.labels" [axisY]="homeMeasuresChart.values"></app-line-chart>
+}

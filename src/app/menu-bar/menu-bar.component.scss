@@ -1,17 +1,22 @@
+
 .container {
-  position: fixed;
-  width: 100%;
-  z-index: 1;
+  position: relative;
+  inline-size: 100%;
+  padding-bottom: 5rem;
+
 }
 
 .p-menubar {
-  width: 30%;
-  margin: 0 auto;
+  position: fixed;
+  inline-size: 30%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
 }
 
 @media screen and (max-width: 900px) {
   .p-menubar {
-    width: 100%;
+    inline-size: 100%;
   }
 }
 
