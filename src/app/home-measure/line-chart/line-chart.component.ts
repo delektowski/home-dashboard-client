@@ -64,11 +64,7 @@ export class LineChartComponent implements OnInit {
         maintainAspectRatio: false,
         aspectRatio: 0.6,
         plugins: {
-          legend: {
-            labels: {
-              color: textColor,
-            },
-          },
+          legend: false,
         },
         scales: {
           x: {

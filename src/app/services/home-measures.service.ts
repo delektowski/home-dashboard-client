@@ -39,7 +39,7 @@ export class HomeMeasuresService {
       .watchQuery<{ getMeasuresHome: MeasureHomeModel[] }>({
         query: GET_MEASURES_HOME,
         variables: {
-          placeName: 'test3',
+          placeName: 'test4',
         },
       })
       .valueChanges;
