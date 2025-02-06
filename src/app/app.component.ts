@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { Apollo, gql } from 'apollo-angular';
-import { map } from 'rxjs';
+import { gql } from 'apollo-angular';
 import { MenuBarComponent } from './menu-bar/menu-bar.component';
 
 
@@ -23,26 +22,7 @@ const GET_MEASURES_HOME = gql`
   styleUrl: './app.component.scss',
 })
 
-export class AppComponent implements OnInit {
-  loading: boolean | undefined;
-  homeMeasures: any;
-
-
-  constructor(private readonly apollo: Apollo) {
-  }
-
-  ngOnInit() {
-    this.homeMeasures = this.apollo
-      .watchQuery<any>({
-        query: GET_MEASURES_HOME,
-        variables: {
-          placeName: 'Living Room',
-        },
-      })
-      .valueChanges.pipe(map(result => result.data.getMeasuresHome));
-  }
-
-
+export class AppComponent {
 }
 
 

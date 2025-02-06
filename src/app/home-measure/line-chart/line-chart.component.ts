@@ -3,6 +3,7 @@ import { ChartModule } from 'primeng/chart';
 import { isPlatformBrowser } from '@angular/common';
 import { DarkModeService } from '../../services/dark-mode.service';
 import { CardModule } from 'primeng/card';
+import { ChartColorsEnum } from '../../models/chart-colors.enum';
 
 @Component({
   selector: 'app-line-chart',
@@ -12,15 +13,14 @@ import { CardModule } from 'primeng/card';
 })
 export class LineChartComponent implements OnInit {
   data: any;
-
   options: any;
-
   platformId = inject(PLATFORM_ID);
-
   private darkModeService = inject(DarkModeService);
 
   @Input() axisX: unknown[] = []
   @Input() axisY: unknown[] = []
+  @Input() chartLineColor: ChartColorsEnum = ChartColorsEnum.BLUE
+  @Input() chartTitle = ""
 
   constructor(private cd: ChangeDetectorRef) {
   }
@@ -43,18 +43,13 @@ export class LineChartComponent implements OnInit {
       const textColor = documentStyle.getPropertyValue('--p-text-color');
       const textColorSecondary = documentStyle.getPropertyValue('--p-text-muted-color');
       const surfaceBorder = documentStyle.getPropertyValue('--p-content-border-color');
-      console.log("this.axisX", this.axisX)
-      console.log("this.axisY", this.axisY)
       this.data = {
         labels: this.axisX,
         datasets: [
-
           {
-            label: 'Third Dataset',
-
             data: this.axisY,
             fill: false,
-            borderColor: documentStyle.getPropertyValue('--p-red-500'),
+            borderColor: documentStyle.getPropertyValue(this.chartLineColor),
             tension: 0.4
           },
         ],

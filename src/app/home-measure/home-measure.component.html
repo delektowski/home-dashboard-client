@@ -1,3 +1,7 @@
-@if (homeMeasuresChart && homeMeasuresChart.labels && homeMeasuresChart.values) {
-  <app-line-chart [axisX]="homeMeasuresChart.labels" [axisY]="homeMeasuresChart.values"></app-line-chart>
+@if (homeMeasuresCharts.length > 0) {
+  @for (homeMeasuresChart of homeMeasuresCharts; track homeMeasuresChart.placeName) {
+    @if (homeMeasuresChart && homeMeasuresChart.labels && homeMeasuresChart.values) {
+      <app-line-chart [axisX]="homeMeasuresChart.labels" [axisY]="homeMeasuresChart.values" [chartTitle]="homeMeasuresChart.placeName"></app-line-chart>
+    }
+  }
 }

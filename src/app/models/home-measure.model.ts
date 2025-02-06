@@ -1,4 +1,4 @@
-export interface MeasureHomeModel {
+export interface HomeMeasureModel {
   createdAt: string;
   humidity?: number;
   placeName: string;

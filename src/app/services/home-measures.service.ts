@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { Apollo, gql } from 'apollo-angular';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { ApolloQueryResult, FetchResult } from '@apollo/client';
-import { MeasureHomeModel } from '../models/measure-home.model';
+import { HomeMeasureModel } from '../models/home-measure.model';
 
 
 const GET_MEASURES_HOME = gql`
@@ -34,19 +34,19 @@ const MEASURES_HOME_SUBSCRIPTION = gql`
 export class HomeMeasuresService {
   private apollo = inject(Apollo);
 
-  getMeasuresHome(): Observable<ApolloQueryResult<{ getMeasuresHome: MeasureHomeModel[] }>> {
+  getHomeMeasures(placeName: string): Observable<ApolloQueryResult<{ getMeasuresHome: HomeMeasureModel[] }>> {
     return this.apollo
-      .watchQuery<{ getMeasuresHome: MeasureHomeModel[] }>({
+      .watchQuery<{ getMeasuresHome: HomeMeasureModel[] }>({
         query: GET_MEASURES_HOME,
         variables: {
-          placeName: 'test4',
+          placeName,
         },
       })
       .valueChanges;
   }
 
-  subscribeMeasuresHome(): Observable<FetchResult<{ measuresHomeAdded: MeasureHomeModel }>> {
-    return this.apollo.subscribe<{ measuresHomeAdded: MeasureHomeModel }>({
+  subscribeMeasuresHome(): Observable<FetchResult<{ measuresHomeAdded: HomeMeasureModel }>> {
+    return this.apollo.subscribe<{ measuresHomeAdded: HomeMeasureModel }>({
       query: MEASURES_HOME_SUBSCRIPTION,
     });
   }
