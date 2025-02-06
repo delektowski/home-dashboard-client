@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { forkJoin, map, take } from 'rxjs';
+import { forkJoin, map, Observable, take } from 'rxjs';
 import { HomeMeasuresService } from '../services/home-measures.service';
 import { ChartModule } from 'primeng/chart';
 import { LineChartComponent } from './line-chart/line-chart.component';
@@ -21,24 +21,23 @@ export class HomeMeasureComponent implements OnInit {
   private homeMeasuresService = inject(HomeMeasuresService);
 
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.getHomeMeasures();
     this.subscribeHomeMeasures();
+  }
 
+  getHomeMeasuresByPlacename(): Observable<HomeMeasureModel[]>[] {
+    const placeNames = [PlaceNameEnum.TEST1, PlaceNameEnum.TEST2, PlaceNameEnum.TEST3, PlaceNameEnum.TEST4];
+    return placeNames.map((placeName) => this.homeMeasuresService.getHomeMeasures(placeName).pipe(take(1), map(result => result.data.getMeasuresHome)));
   }
 
   /**
    * Fetches home measures data from the service.
    */
-  getHomeMeasures() {
-    const test1 = this.homeMeasuresService.getHomeMeasures(PlaceNameEnum.TEST1).pipe(take(1), map(result => result.data.getMeasuresHome));
-    const test2 = this.homeMeasuresService.getHomeMeasures(PlaceNameEnum.TEST2).pipe(take(1), map(result => result.data.getMeasuresHome));
-    const test3 = this.homeMeasuresService.getHomeMeasures(PlaceNameEnum.TEST3).pipe(take(1), map(result => result.data.getMeasuresHome));
-    const test4 = this.homeMeasuresService.getHomeMeasures(PlaceNameEnum.TEST4).pipe(take(1), map(result => result.data.getMeasuresHome));
-
-    forkJoin([test1, test2, test3, test4]).pipe(take(1)).subscribe((result) => {
-      this.homeMeasuresCharts = result.map((val) => {
-        return this.handleLabelsValuesSeparation(val)
+  getHomeMeasures(): void {
+    forkJoin(this.getHomeMeasuresByPlacename()).pipe(take(1)).subscribe((results) => {
+      this.homeMeasuresCharts = results.map((result) => {
+        return this.handleLabelsValuesSeparation(result);
       });
     });
   }
@@ -46,7 +45,7 @@ export class HomeMeasureComponent implements OnInit {
   /**
    * Subscribes to home measures updates from the service.
    */
-  subscribeHomeMeasures() {
+  subscribeHomeMeasures():void {
     this.homeMeasuresService.subscribeMeasuresHome().pipe(map((result) => result?.data?.measuresHomeAdded)).subscribe((result) => {
       console.log('result', result);
     });
@@ -70,6 +69,4 @@ export class HomeMeasureComponent implements OnInit {
     return [hoursMinutes, dayMonth];
 
   }
-
-
 }
