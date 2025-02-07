@@ -1,0 +1,14 @@
+<div class="card">
+  <p-panel [toggleable]="true" [collapsed]="true">
+    <ng-template #header>
+      <div>
+        <span class="font-bold">{{title}}</span>
+      </div>
+    </ng-template>
+    <ng-template #icons>
+      <p-button icon="pi pi-cog" severity="secondary" rounded text (click)="menu.toggle($event)" />
+      <p-menu #menu id="config_menu" [model]="items" [popup]="true" />
+    </ng-template>
+    <ng-content></ng-content>
+  </p-panel>
+</div>

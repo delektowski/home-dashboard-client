@@ -2,12 +2,12 @@ import { ChangeDetectorRef, Component, inject, Input, OnInit, PLATFORM_ID } from
 import { ChartModule } from 'primeng/chart';
 import { isPlatformBrowser } from '@angular/common';
 import { DarkModeService } from '../../services/dark-mode.service';
-import { CardModule } from 'primeng/card';
 import { ChartColorsEnum } from '../../models/chart-colors.enum';
+import { PanelCardComponent } from '../panel-card/panel-card.component';
 
 @Component({
   selector: 'app-line-chart',
-  imports: [ChartModule,CardModule],
+  imports: [ChartModule, PanelCardComponent],
   templateUrl: './line-chart.component.html',
   styleUrl: './line-chart.component.scss',
 })
@@ -17,10 +17,10 @@ export class LineChartComponent implements OnInit {
   platformId = inject(PLATFORM_ID);
   private darkModeService = inject(DarkModeService);
 
-  @Input() axisX: unknown[] = []
-  @Input() axisY: unknown[] = []
-  @Input() chartLineColor: ChartColorsEnum = ChartColorsEnum.BLUE
-  @Input() chartTitle = ""
+  @Input() axisX: unknown[] = [];
+  @Input() axisY: unknown[] = [];
+  @Input() chartLineColor: ChartColorsEnum = ChartColorsEnum.BLUE;
+  @Input() chartTitle = '';
 
   constructor(private cd: ChangeDetectorRef) {
   }
@@ -28,7 +28,7 @@ export class LineChartComponent implements OnInit {
 
   ngOnInit() {
     this.initChart();
-    this.handleDarkMode()
+    this.handleDarkMode();
   }
 
   handleDarkMode() {
@@ -50,7 +50,7 @@ export class LineChartComponent implements OnInit {
             data: this.axisY,
             fill: false,
             borderColor: documentStyle.getPropertyValue(this.chartLineColor),
-            tension: 0.4
+            tension: 0.4,
           },
         ],
       };

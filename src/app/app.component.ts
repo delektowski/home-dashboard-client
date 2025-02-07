@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { gql } from 'apollo-angular';
-import { MenuBarComponent } from './menu-bar/menu-bar.component';
+import { PopupMenuComponent } from './popup-menu/popup-menu.component';
 
 
 const GET_MEASURES_HOME = gql`
@@ -17,7 +17,7 @@ const GET_MEASURES_HOME = gql`
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, MenuBarComponent],
+  imports: [RouterOutlet, PopupMenuComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })

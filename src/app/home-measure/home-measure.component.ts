@@ -45,7 +45,7 @@ export class HomeMeasureComponent implements OnInit {
   /**
    * Subscribes to home measures updates from the service.
    */
-  subscribeHomeMeasures():void {
+  subscribeHomeMeasures(): void {
     this.homeMeasuresService.subscribeMeasuresHome().pipe(map((result) => result?.data?.measuresHomeAdded)).subscribe((result) => {
       console.log('result', result);
     });
