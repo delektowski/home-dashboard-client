@@ -16,6 +16,17 @@ const GET_MEASURES_HOME = gql`
     }
   }
 `;
+const GET_CURRENT_MEASURE_HOME = gql`
+  query getCurrentMeasureHome($placeName: String!) {
+    getCurrentMeasureHome(placeName: $placeName) {
+      id
+      placeName
+      temperature
+      humidity
+      createdAt
+    }
+  }
+`;
 
 const MEASURES_HOME_SUBSCRIPTION = gql`
   subscription {
@@ -38,6 +49,17 @@ export class HomeMeasuresService {
     return this.apollo
       .watchQuery<{ getMeasuresHome: HomeMeasureModel[] }>({
         query: GET_MEASURES_HOME,
+        variables: {
+          placeName,
+        },
+      })
+      .valueChanges;
+  }
+
+  getCurrentHomeMeasure(placeName: string): Observable<ApolloQueryResult<{ getCurrentMeasureHome: HomeMeasureModel }>> {
+    return this.apollo
+      .watchQuery<{ getCurrentMeasureHome: HomeMeasureModel }>({
+        query: GET_CURRENT_MEASURE_HOME,
         variables: {
           placeName,
         },

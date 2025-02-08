@@ -15,7 +15,7 @@ import { DarkModeService } from '../services/dark-mode.service';
 export class MenuBarComponent implements OnInit {
 
   items: MenuItem[] | undefined;
-  isDarkMode = true;
+  isDarkMode = false;
   private darkModeService = inject(DarkModeService);
 
 

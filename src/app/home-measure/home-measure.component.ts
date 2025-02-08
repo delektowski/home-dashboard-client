@@ -16,6 +16,7 @@ import { PlaceNameEnum } from '../models/place-name.enum';
 })
 export class HomeMeasureComponent implements OnInit {
   homeMeasuresCharts: HomeMeasureChartModel[] = [];
+  placeNames = [PlaceNameEnum.TEST1, PlaceNameEnum.TEST2, PlaceNameEnum.TEST3, PlaceNameEnum.TEST4];
 
 
   private homeMeasuresService = inject(HomeMeasuresService);
@@ -23,24 +24,41 @@ export class HomeMeasureComponent implements OnInit {
 
   ngOnInit(): void {
     this.getHomeMeasures();
+    this.getCurrentHomeMeasures();
     this.subscribeHomeMeasures();
   }
 
-  getHomeMeasuresByPlacename(): Observable<HomeMeasureModel[]>[] {
-    const placeNames = [PlaceNameEnum.TEST1, PlaceNameEnum.TEST2, PlaceNameEnum.TEST3, PlaceNameEnum.TEST4];
-    return placeNames.map((placeName) => this.homeMeasuresService.getHomeMeasures(placeName).pipe(take(1), map(result => result.data.getMeasuresHome)));
+  getHomeMeasuresByPlaceName(): Observable<HomeMeasureModel[]>[] {
+    return this.placeNames.map((placeName) => this.homeMeasuresService.getHomeMeasures(placeName).pipe(take(1), map(result => result.data.getMeasuresHome)));
   }
 
   /**
    * Fetches home measures data from the service.
    */
   getHomeMeasures(): void {
-    forkJoin(this.getHomeMeasuresByPlacename()).pipe(take(1)).subscribe((results) => {
+    forkJoin(this.getHomeMeasuresByPlaceName()).pipe(take(1)).subscribe((results) => {
       this.homeMeasuresCharts = results.map((result) => {
+
         return this.handleLabelsValuesSeparation(result);
       });
     });
   }
+
+  getCurrentHomeMeasuresByPlaceName(): Observable<HomeMeasureModel>[] {
+    return this.placeNames.map((placeName) => this.homeMeasuresService.getCurrentHomeMeasure(placeName).pipe(take(1), map(result => result.data.getCurrentMeasureHome)));
+  }
+
+
+  /**
+   * Fetches home measures data from the service.
+   */
+  getCurrentHomeMeasures(): void {
+    forkJoin(this.getCurrentHomeMeasuresByPlaceName()).pipe(take(1)).subscribe((results) => {
+      console.log('result23', results);
+      });
+
+  }
+
 
   /**
    * Subscribes to home measures updates from the service.
