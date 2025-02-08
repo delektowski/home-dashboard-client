@@ -15,16 +15,13 @@ import { PlaceNameEnum } from '../models/place-name.enum';
   styleUrl: './home-measure.component.scss',
 })
 export class HomeMeasureComponent implements OnInit {
-  homeMeasuresCharts: HomeMeasureChartModel[] = [];
-  placeNames = [PlaceNameEnum.TEST1, PlaceNameEnum.TEST2, PlaceNameEnum.TEST3, PlaceNameEnum.TEST4];
-
-
   private homeMeasuresService = inject(HomeMeasuresService);
-
+  homeMeasuresCharts: HomeMeasureChartModel[] = [];
+  currentHomeMeasuresCharts: HomeMeasureModel[] = [];
+  placeNames = [PlaceNameEnum.TEST1, PlaceNameEnum.TEST2, PlaceNameEnum.TEST3, PlaceNameEnum.TEST4];
 
   ngOnInit(): void {
     this.getHomeMeasures();
-    this.getCurrentHomeMeasures();
     this.subscribeHomeMeasures();
   }
 
@@ -36,10 +33,12 @@ export class HomeMeasureComponent implements OnInit {
    * Fetches home measures data from the service.
    */
   getHomeMeasures(): void {
-    forkJoin(this.getHomeMeasuresByPlaceName()).pipe(take(1)).subscribe((results) => {
-      this.homeMeasuresCharts = results.map((result) => {
-
-        return this.handleLabelsValuesSeparation(result);
+    forkJoin(this.getHomeMeasuresByPlaceName()).pipe(take(1)).subscribe((homeMeasuresResults) => {
+      forkJoin(this.getCurrentHomeMeasuresByPlaceName()).pipe(take(1)).subscribe((currentMeasuresResults) => {
+        this.homeMeasuresCharts = homeMeasuresResults.map((result) => {
+          return this.handleLabelsValuesSeparation(result);
+        });
+        this.currentHomeMeasuresCharts = currentMeasuresResults;
       });
     });
   }
@@ -48,24 +47,18 @@ export class HomeMeasureComponent implements OnInit {
     return this.placeNames.map((placeName) => this.homeMeasuresService.getCurrentHomeMeasure(placeName).pipe(take(1), map(result => result.data.getCurrentMeasureHome)));
   }
 
-
-  /**
-   * Fetches home measures data from the service.
-   */
-  getCurrentHomeMeasures(): void {
-    forkJoin(this.getCurrentHomeMeasuresByPlaceName()).pipe(take(1)).subscribe((results) => {
-      console.log('result23', results);
-      });
-
-  }
-
-
   /**
    * Subscribes to home measures updates from the service.
    */
   subscribeHomeMeasures(): void {
     this.homeMeasuresService.subscribeMeasuresHome().pipe(map((result) => result?.data?.measuresHomeAdded)).subscribe((result) => {
-      console.log('result', result);
+      let placeNameMeasureToChangeIndex = this.currentHomeMeasuresCharts.findIndex(measure => measure.placeName === result?.placeName);
+      if (placeNameMeasureToChangeIndex !== -1) {
+        this.currentHomeMeasuresCharts[placeNameMeasureToChangeIndex] = {
+          ...this.currentHomeMeasuresCharts[placeNameMeasureToChangeIndex],
+          temperature: result?.temperature ?? 0,
+        };
+      }
     });
   }
 

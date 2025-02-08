@@ -21,6 +21,8 @@ export class LineChartComponent implements OnInit {
   @Input() axisY: unknown[] = [];
   @Input() chartLineColor: ChartColorsEnum = ChartColorsEnum.BLUE;
   @Input() chartTitle = '';
+  @Input() currentTemperature: number | undefined;
+  @Input() currentHumidity: number | undefined;
 
   constructor(private cd: ChangeDetectorRef) {
   }

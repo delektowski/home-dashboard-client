@@ -1,9 +1,9 @@
-
-
 @if (homeMeasuresCharts.length > 0) {
-  @for (homeMeasuresChart of homeMeasuresCharts; track homeMeasuresChart.placeName) {
+  @for (homeMeasuresChart of homeMeasuresCharts; track homeMeasuresChart.placeName; let idx = $index) {
     @if (homeMeasuresChart && homeMeasuresChart.labels && homeMeasuresChart.values) {
-      <app-line-chart [axisX]="homeMeasuresChart.labels" [axisY]="homeMeasuresChart.values" [chartTitle]="homeMeasuresChart.placeName"></app-line-chart>
+      <app-line-chart [axisX]="homeMeasuresChart.labels" [axisY]="homeMeasuresChart.values"
+                      [chartTitle]="homeMeasuresChart.placeName"
+                      [currentTemperature]="currentHomeMeasuresCharts[idx].placeName === homeMeasuresChart.placeName ? currentHomeMeasuresCharts[idx].temperature : undefined"></app-line-chart>
     }
   }
 }

@@ -14,6 +14,8 @@ import { PrimeIcons } from 'primeng/api';
 export class PanelCardComponent implements OnInit {
   @Input()
   title = ""
+  @Input()
+  currentTemperature: number | undefined;
   items: { label?: string; icon?: string; separator?: boolean }[] = [];
 
   ngOnInit() {
