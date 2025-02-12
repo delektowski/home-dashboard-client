@@ -1,0 +1,22 @@
+.container {
+  display: flex;
+  justify-items: center;
+  align-items: center;
+
+  & .header-place-name {
+    margin-right: 2rem;
+  }
+}
+
+.badge-width {
+  width: 60px;
+}
+
+.badge-color-red {
+  background-color: red;
+}
+.badge-color-blue {
+  background-color: blue;
+}
+
+

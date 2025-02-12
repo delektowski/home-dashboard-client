@@ -1,10 +1,11 @@
 <div class="card">
   <p-panel [toggleable]="true" [collapsed]="true">
     <ng-template #header>
-      <div>
-        <span class="font-bold">{{title}}</span>
-        <span class="font-bold">Temperature: {{currentTemperature}}</span>
-      </div>
+
+        <span class="header-place-name">{{title}}</span>
+
+
+      <p-badge styleClass="badge-width" value="{{currentTemperature}}" badgeSize="xlarge" [severity]= severityValue() />
     </ng-template>
     <ng-template #icons>
       <p-button icon="pi pi-cog" severity="secondary" rounded text (click)="menu.toggle($event)" />
