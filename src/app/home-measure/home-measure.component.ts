@@ -52,12 +52,17 @@ export class HomeMeasureComponent implements OnInit {
    */
   subscribeHomeMeasures(): void {
     this.homeMeasuresService.subscribeMeasuresHome().pipe(map((result) => result?.data?.measuresHomeAdded)).subscribe((result) => {
+
       let placeNameMeasureToChangeIndex = this.currentHomeMeasuresCharts.findIndex(measure => measure.placeName === result?.placeName);
-      if (placeNameMeasureToChangeIndex !== -1 && result?.temperature ) {
+
+      if (placeNameMeasureToChangeIndex !== -1 && result?.temperature) {
+
         this.currentHomeMeasuresCharts[placeNameMeasureToChangeIndex] = {
           ...this.currentHomeMeasuresCharts[placeNameMeasureToChangeIndex],
           temperature: result.temperature,
+          createdAt: result.createdAt,
         };
+
       }
     });
   }

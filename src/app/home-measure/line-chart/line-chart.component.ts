@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject, Input, OnInit, PLATFORM_ID } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, Input, OnChanges, OnInit, PLATFORM_ID } from '@angular/core';
 import { ChartModule } from 'primeng/chart';
 import { isPlatformBrowser } from '@angular/common';
 import { DarkModeService } from '../../services/dark-mode.service';
@@ -23,6 +23,7 @@ export class LineChartComponent implements OnInit {
   @Input() chartTitle = '';
   @Input() currentTemperature: number | undefined;
   @Input() currentHumidity: number | undefined;
+  @Input() createdAt: string | undefined;
 
   constructor(private cd: ChangeDetectorRef) {
   }

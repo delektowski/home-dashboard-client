@@ -19,10 +19,8 @@ const GET_MEASURES_HOME = gql`
 const GET_CURRENT_MEASURE_HOME = gql`
   query getCurrentMeasureHome($placeName: String!) {
     getCurrentMeasureHome(placeName: $placeName) {
-      id
       placeName
       temperature
-      humidity
       createdAt
     }
   }
@@ -31,7 +29,6 @@ const GET_CURRENT_MEASURE_HOME = gql`
 const MEASURES_HOME_SUBSCRIPTION = gql`
   subscription {
     measuresHomeAdded {
-      id
       placeName
       temperature
       createdAt

@@ -3,7 +3,8 @@
     @if (homeMeasuresChart && homeMeasuresChart.labels && homeMeasuresChart.values) {
       <app-line-chart [axisX]="homeMeasuresChart.labels" [axisY]="homeMeasuresChart.values"
                       [chartTitle]="homeMeasuresChart.placeName"
-                      [currentTemperature]="currentHomeMeasuresCharts[idx].placeName === homeMeasuresChart.placeName ? currentHomeMeasuresCharts[idx].temperature : undefined"></app-line-chart>
+                      [currentTemperature]="currentHomeMeasuresCharts[idx].placeName === homeMeasuresChart.placeName ? currentHomeMeasuresCharts[idx].temperature : undefined"
+                      [createdAt]="currentHomeMeasuresCharts[idx].placeName === homeMeasuresChart.placeName ? currentHomeMeasuresCharts[idx].createdAt : 'undefined'"></app-line-chart>
     }
   }
 }
