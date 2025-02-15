@@ -11,7 +11,7 @@ import { PanelCardComponent } from '../panel-card/panel-card.component';
   templateUrl: './line-chart.component.html',
   styleUrl: './line-chart.component.scss',
 })
-export class LineChartComponent implements OnInit {
+export class LineChartComponent implements OnInit, OnChanges {
   data: any;
   options: any;
   platformId = inject(PLATFORM_ID);
@@ -20,10 +20,11 @@ export class LineChartComponent implements OnInit {
   @Input() axisX: unknown[] = [];
   @Input() axisY: unknown[] = [];
   @Input() chartLineColor: ChartColorsEnum = ChartColorsEnum.BLUE;
-  @Input() chartTitle = '';
+  @Input() placeName = '';
   @Input() currentTemperature: number | undefined;
   @Input() currentHumidity: number | undefined;
   @Input() createdAt: string | undefined;
+  @Input() placeNameChanged: string[] = [];
 
   constructor(private cd: ChangeDetectorRef) {
   }
@@ -32,6 +33,14 @@ export class LineChartComponent implements OnInit {
   ngOnInit() {
     this.initChart();
     this.handleDarkMode();
+  }
+
+  ngOnChanges() {
+    if (this.placeNameChanged?.includes(this.placeName)) {
+      this.initChart();
+      this.placeNameChanged.pop();
+
+    }
   }
 
   handleDarkMode() {
@@ -84,6 +93,7 @@ export class LineChartComponent implements OnInit {
         },
       };
       this.cd.markForCheck();
+
     }
   }
 

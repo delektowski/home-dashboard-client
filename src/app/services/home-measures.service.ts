@@ -32,6 +32,7 @@ const MEASURES_HOME_SUBSCRIPTION = gql`
       placeName
       temperature
       createdAt
+      isForCurrentMeasure
     }
   }
 `;
@@ -49,6 +50,8 @@ export class HomeMeasuresService {
         variables: {
           placeName,
         },
+        fetchPolicy: 'no-cache'
+
       })
       .valueChanges;
   }
@@ -60,6 +63,7 @@ export class HomeMeasuresService {
         variables: {
           placeName,
         },
+        fetchPolicy: 'no-cache'
       })
       .valueChanges;
   }

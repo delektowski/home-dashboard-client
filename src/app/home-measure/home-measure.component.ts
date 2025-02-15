@@ -19,14 +19,12 @@ export class HomeMeasureComponent implements OnInit {
   homeMeasuresCharts: HomeMeasureChartModel[] = [];
   currentHomeMeasuresCharts: HomeMeasureModel[] = [];
   placeNames = [PlaceNameEnum.TEST1, PlaceNameEnum.TEST2, PlaceNameEnum.TEST3, PlaceNameEnum.TEST4];
+  placeNameChanged: string[] = [];
 
   ngOnInit(): void {
     this.getHomeMeasures();
+    this.getCurrentHomeMeasures();
     this.subscribeHomeMeasures();
-  }
-
-  getHomeMeasuresByPlaceName(): Observable<HomeMeasureModel[]>[] {
-    return this.placeNames.map((placeName) => this.homeMeasuresService.getHomeMeasures(placeName).pipe(take(1), map(result => result.data.getMeasuresHome)));
   }
 
   /**
@@ -34,17 +32,50 @@ export class HomeMeasureComponent implements OnInit {
    */
   getHomeMeasures(): void {
     forkJoin(this.getHomeMeasuresByPlaceName()).pipe(take(1)).subscribe((homeMeasuresResults) => {
-      forkJoin(this.getCurrentHomeMeasuresByPlaceName()).pipe(take(1)).subscribe((currentMeasuresResults) => {
-        this.homeMeasuresCharts = homeMeasuresResults.map((result) => {
-          return this.handleLabelsValuesSeparation(result);
-        });
-        this.currentHomeMeasuresCharts = currentMeasuresResults;
+      this.homeMeasuresCharts = homeMeasuresResults.map((result) => {
+        return this.handleLabelsValuesSeparation(result);
       });
     });
   }
 
+  /**
+   * Fetches home measures data for each place name.
+   *
+   * @returns {Observable<HomeMeasureModel[]>[]} An array of observables, each fetching the home measures for a specific place name.
+   */
+  getHomeMeasuresByPlaceName(): Observable<HomeMeasureModel[]>[] {
+    return this.placeNames.map((placeName) =>
+      this.homeMeasuresService.getHomeMeasures(placeName)
+        .pipe(
+          take(1),
+          map(result => result.data.getMeasuresHome),
+        ),
+    );
+  }
+
+  /**
+   * Fetches current home measures data from the service.
+   */
+  getCurrentHomeMeasures(): void {
+    forkJoin(this.getCurrentHomeMeasuresByPlaceName()).pipe(take(1)).subscribe((currentMeasuresResults) => {
+      this.currentHomeMeasuresCharts = currentMeasuresResults;
+    });
+  }
+
+
+  /**
+   * Fetches current home measures data for each place name.
+   *
+   * @returns {Observable<HomeMeasureModel>[]} An array of observables, each fetching the current home measure for a specific place name.
+   */
   getCurrentHomeMeasuresByPlaceName(): Observable<HomeMeasureModel>[] {
-    return this.placeNames.map((placeName) => this.homeMeasuresService.getCurrentHomeMeasure(placeName).pipe(take(1), map(result => result.data.getCurrentMeasureHome)));
+    return this.placeNames.map((placeName) =>
+      this.homeMeasuresService.getCurrentHomeMeasure(placeName)
+        .pipe(
+          take(1),
+          map(result => result.data.getCurrentMeasureHome),
+        ),
+    );
   }
 
   /**
@@ -52,21 +83,40 @@ export class HomeMeasureComponent implements OnInit {
    */
   subscribeHomeMeasures(): void {
     this.homeMeasuresService.subscribeMeasuresHome().pipe(map((result) => result?.data?.measuresHomeAdded)).subscribe((result) => {
+      this.updateCurrentHM(result);
+      if(!result?.isForCurrentMeasure && result?.placeName) {
+        this.placeNameChanged?.push(result?.placeName);
+        this.updateHMCharts()
+      }
 
-      let placeNameMeasureToChangeIndex = this.currentHomeMeasuresCharts.findIndex(measure => measure.placeName === result?.placeName);
+    });
+  }
+
+  updateCurrentHM(result: HomeMeasureModel | undefined): void {
+    if (result?.placeName) {
+      let placeNameMeasureToChangeIndex = this.currentHomeMeasuresCharts.findIndex(measure => measure.placeName === result.placeName);
 
       if (placeNameMeasureToChangeIndex !== -1 && result?.temperature) {
-
         this.currentHomeMeasuresCharts[placeNameMeasureToChangeIndex] = {
           ...this.currentHomeMeasuresCharts[placeNameMeasureToChangeIndex],
           temperature: result.temperature,
           createdAt: result.createdAt,
         };
-
       }
-    });
+    }
   }
 
+  updateHMCharts(): void {
+    this.getHomeMeasures();
+
+  }
+
+  /**
+   * Separates labels and values from the home measure results.
+   *
+   * @param {HomeMeasureModel[]} result - The array of home measure results.
+   * @returns {HomeMeasureChartModel} The home measure chart model with separated labels and values.
+   */
   handleLabelsValuesSeparation(result: HomeMeasureModel[]): HomeMeasureChartModel {
     return result.reduce((acc: HomeMeasureChartModel, current) => {
       if (!acc.placeName) {
@@ -78,11 +128,16 @@ export class HomeMeasureComponent implements OnInit {
     }, { labels: [], values: [], placeName: '' });
   }
 
-  splitLabelTwoLines(createdAt: string) {
+  /**
+   * Splits the given date string into two lines: time and date.
+   *
+   * @param {string} createdAt - The date string to be split.
+   * @returns {string[]} An array containing the time and date as separate strings.
+   */
+  splitLabelTwoLines(createdAt: string): string[] {
     const date = new Date(createdAt);
     const hoursMinutes = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     const dayMonth = date.toLocaleDateString([], { day: '2-digit', month: '2-digit' });
     return [hoursMinutes, dayMonth];
-
   }
 }
