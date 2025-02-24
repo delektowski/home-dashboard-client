@@ -1,5 +1,6 @@
 services:
-  my-containerized-angular-app-example:
+  app:
+    container_name: frontend
     # Build the Docker image using the Dockerfile in the current directory
     build:
       context: .
