@@ -4,5 +4,14 @@ dashboard.deldev.ovh {
     try_files {path} /index.html
     file_server
 
+    # Proxy requests to NestJS
+    handle_path /api/* {
+        reverse_proxy backend:3000
+    }
+
+    handle_path /graphql {
+        reverse_proxy backend:3000
+    }
+
     tls delektowski@interia.pl
 }

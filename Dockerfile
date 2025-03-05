@@ -32,7 +32,7 @@ COPY --from=build-angular /build/dist/home-dashboard-client/browser ./www
 COPY Caddyfile /etc/caddy/Caddyfile
 
 # Expose the port for Caddy
-EXPOSE 80
+EXPOSE 80 443
 
 # Command to start Caddy
 CMD ["caddy", "run", "--config", "/etc/caddy/Caddyfile"]
