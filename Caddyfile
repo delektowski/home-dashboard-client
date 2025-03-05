@@ -1,21 +1,8 @@
-# Caddyfile
-
-{
-    # Global options can be specified here if needed
-    # (currently none are needed)
-}
-
-# Angular app server configuration block:
 dashboard.deldev.ovh {
-    root * ./www
+    root * /www
+    encode gzip
+    try_files {path} /index.html
     file_server
 
-    # Rewrite for deep links if the file does not exist.
-    # Without this rule, deep links to Angular routes will return
-    # a 404 error (unless you use Angular's HashLocationStrategy).
-    @notFound {
-        not file {path}
-    }
-
-    rewrite @notFound /index.html
+    tls delektowski@interia.pl
 }
