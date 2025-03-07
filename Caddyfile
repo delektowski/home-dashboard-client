@@ -1,8 +1,11 @@
-dashboard.deldev.ovh {
-    root * /www
+dashboard-server.deldev.ovh {
+    root * ./www
     encode gzip
     try_files {path} /index.html
     file_server
+    handle_path /graphql {
+        reverse_proxy backend:3000
+    }
 
     tls delektowski@interia.pl
 }
