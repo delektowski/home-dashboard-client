@@ -1,10 +1,16 @@
 dashboard-server.deldev.ovh {
     root * ./www
     encode gzip
-    try_files {path} /index.html
-    file_server
-    handle_path /graphql {
+
+    # Handle all GraphQL requests - explicitly define methods
+    handle /graphql* {
         reverse_proxy backend:3000
+    }
+
+    # Handle all other requests with the SPA settings
+    handle {
+        try_files {path} /index.html
+        file_server
     }
 
     tls delektowski@interia.pl

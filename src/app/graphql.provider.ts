@@ -10,12 +10,16 @@ import { Kind, OperationTypeNode } from 'graphql/index';
 export const graphqlProvider: Provider[] = [provideApollo(() => {
   const httpLink = inject(HttpLink);// Create an http link:
   const http = httpLink.create({
-    uri: 'http://localhost:3000/graphql',
+    uri: '/graphql',
   });
+
+  // WebSocket URL uses relative path with location.protocol to determine ws/wss
+  const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+  const wsUrl = `${wsProtocol}//${window.location.host}/graphql`;
 
   const ws = new GraphQLWsLink(
     createClient({
-      url: 'ws://localhost:3000/graphql',
+      url: wsUrl,
     }),
   );
 
